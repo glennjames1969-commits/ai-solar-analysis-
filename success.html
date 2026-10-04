@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Analysing your quote</title>
+<style>body{margin:0;background:#06152f;color:#fff;font-family:Inter,system-ui,sans-serif;text-align:center}.box{max-width:650px;margin:18vh auto;padding:30px}.spin{width:56px;height:56px;border:5px solid #214676;border-top-color:#51d6ff;border-radius:50%;animation:r 1s linear infinite;margin:25px auto}@keyframes r{to{transform:rotate(360deg)}}p{color:#a9bad3;line-height:1.6}</style></head>
+<body><div class="box"><div style="font-weight:900"><span style="color:#51d6ff">AI</span> SOLAR ANALYSIS</div><div class="spin"></div><h1>Your payment is confirmed.</h1><p id="msg">AI is analysing your quote now. This normally takes around 30 seconds.</p></div>
+<script>
+(async()=>{const sid=new URLSearchParams(location.search).get('session_id');if(!sid)return;
+try{const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sid})});const j=await r.json();if(!r.ok)throw Error(j.error||'Analysis failed');document.body.innerHTML='<div class="box"><div style="font-weight:900"><span style="color:#51d6ff">AI</span> SOLAR ANALYSIS</div><h1>Analysis complete</h1><p>Your report has been generated and emailed to you.</p><a href="'+j.reportUrl+'" style="color:#51d6ff">View your report</a></div>'}catch(e){document.querySelector('#msg').textContent='We are still processing your report. Please check your email shortly.'}})();
+</script></body></html>

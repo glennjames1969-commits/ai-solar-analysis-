@@ -1,0 +1,13 @@
+{
+  "name": "ai-solar-analysis",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.0.0",
+    "formidable": "^3.5.4",
+    "stripe": "^18.5.0"
+  }
+}

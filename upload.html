@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upload Solar Quote — AI Solar Analysis</title>
+<style>
+body{margin:0;background:#06152f;color:#fff;font-family:Inter,system-ui,sans-serif}.wrap{max-width:760px;margin:auto;padding:28px}.brand{font-weight:900}.brand i{color:#51d6ff;font-style:normal}.box{margin-top:35px;background:#0c2349;border:1px solid #214676;border-radius:20px;padding:28px}h1{font-size:38px;margin:8px 0 10px}p{color:#a9bad3;line-height:1.5}.field{margin:18px 0}.field label{display:block;font-weight:700;margin-bottom:8px}.field input{width:100%;padding:14px;border-radius:10px;border:1px solid #456184;background:#06152f;color:#fff;font-size:16px}.upload{border:2px dashed #328cff;padding:24px;text-align:center;border-radius:14px}.upload input{display:none}.upload label{display:block;cursor:pointer;color:#8fd9ff}.btn{width:100%;margin-top:22px;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:900;background:linear-gradient(90deg,#1597ff,#51d6ff);color:#001027}.status{margin-top:14px;color:#9fdcff;text-align:center}.small{font-size:13px;color:#91a6c3}
+</style></head>
+<body><div class="wrap"><div class="brand"><i>AI</i> SOLAR ANALYSIS</div>
+<div class="box"><h1>Upload your quote</h1><p>Upload it once. After payment, the quote goes straight into the AI analysis process.</p>
+<form id="form">
+<div class="field"><label>Name</label><input name="name" required></div>
+<div class="field"><label>Email</label><input type="email" name="email" required></div>
+<div class="field"><label>Postcode</label><input name="postcode" inputmode="numeric"></div>
+<div class="field"><div class="upload"><label for="quote">📄 Tap to choose your solar quote<br><span class="small" id="fileName">PDF, JPG or PNG</span></label><input id="quote" name="quote" type="file" accept=".pdf,.jpg,.jpeg,.png" required></div></div>
+<div class="field"><div class="upload"><label for="bill">⚡ Optional electricity bill<br><span class="small" id="billName">PDF, JPG or PNG</span></label><input id="bill" name="bill" type="file" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+<button class="btn" id="submit">Continue to secure payment — $9.90</button>
+<div class="status" id="status"></div></form></div></div>
+<script>
+const q=document.querySelector('#quote'),b=document.querySelector('#bill'),s=document.querySelector('#status'),btn=document.querySelector('#submit');
+q.onchange=()=>document.querySelector('#fileName').textContent=q.files[0]?.name||'PDF, JPG or PNG';
+b.onchange=()=>document.querySelector('#billName').textContent=b.files[0]?.name||'PDF, JPG or PNG';
+document.querySelector('#form').onsubmit=async e=>{
+ e.preventDefault();btn.disabled=true;s.textContent='Uploading securely…';
+ const fd=new FormData(e.target);
+ try{
+  const r=await fetch('/api/upload',{method:'POST',body:fd}); const j=await r.json();
+  if(!r.ok) throw new Error(j.error||'Upload failed');
+  s.textContent='Quote uploaded. Opening secure payment…';
+  const p=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uploadId:j.uploadId,email:fd.get('email')})});
+  const pj=await p.json(); if(!p.ok) throw new Error(pj.error||'Payment setup failed');
+  location.href=pj.url;
+ }catch(err){s.textContent=err.message;btn.disabled=false}
+};
+</script></body></html>
