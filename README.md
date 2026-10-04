@@ -26,4 +26,4 @@ Recommended:
 
 ## Important
 
-The current version intentionally keeps the architecture simple. Before taking real customer payments, add durable report storage and a Stripe webhook as the source of truth for paid orders. The success-page analysis is designed for fast delivery/testing, not as a replacement for payment webhooks at scale.
+The current version intentionally keeps the architecture simple. Before taking real customer payments, add durable report storage and a Stripe webhook as the source of truth for paid orders. The success-page analysis is designed for fast delivery/testing, not as a replacement for payment webhooks at scale. .
